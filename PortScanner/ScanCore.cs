@@ -70,7 +70,11 @@ namespace PortScanner
                                 else sock.Close();
                             }
                             catch (SocketException)
-                            { Form.Scanning = false; }
+                            {
+                                Form.Scanning = false;
+                                MessageBox.Show("Verbindungsfehler.");
+                                token.ThrowIfCancellationRequested();
+                            }
                         }
                     }
                     stopwatch.Stop();

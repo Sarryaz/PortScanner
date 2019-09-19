@@ -91,6 +91,7 @@
             this.ipTextBox.Text = "Beispiel: 128.105.39.11 ";
             this.ipTextBox.TextChanged += new System.EventHandler(this.IpTextBox_TextChanged);
             this.ipTextBox.Enter += new System.EventHandler(this.IpTextBox_Enter);
+            this.ipTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ipTextBox_KeyDown);
             this.ipTextBox.Leave += new System.EventHandler(this.IpTextBox_Leave);
             // 
             // pingTextBox
@@ -219,7 +220,7 @@
             this.startPortTextBox.Name = "startPortTextBox";
             this.startPortTextBox.Size = new System.Drawing.Size(81, 20);
             this.startPortTextBox.TabIndex = 14;
-            this.startPortTextBox.Text = "Beispiel: 21 ";
+            this.startPortTextBox.Text = "Beispiel: 10";
             this.startPortTextBox.TextChanged += new System.EventHandler(this.StartPortTextBox_TextChanged);
             this.startPortTextBox.Enter += new System.EventHandler(this.StartPortTextBox_Enter);
             this.startPortTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.StartPortTextBox_KeyPress);
@@ -242,7 +243,7 @@
             this.endPortTextBox.Name = "endPortTextBox";
             this.endPortTextBox.Size = new System.Drawing.Size(81, 20);
             this.endPortTextBox.TabIndex = 16;
-            this.endPortTextBox.Text = "Beispiel: 5355 ";
+            this.endPortTextBox.Text = "Beispiel: 100";
             this.endPortTextBox.TextChanged += new System.EventHandler(this.EndPortTextBox_TextChanged);
             this.endPortTextBox.Enter += new System.EventHandler(this.EndPortTextBox_Enter);
             this.endPortTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.EndPortTextBox_KeyPress);

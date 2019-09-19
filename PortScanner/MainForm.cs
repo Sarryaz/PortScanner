@@ -245,7 +245,7 @@ namespace PortScanner
         {
             if (string.IsNullOrEmpty(startPortTextBox.Text))
             {
-                startPortTextBox.Text = "Beispiel: 10 ";
+                startPortTextBox.Text = "Beispiel: 10";
                 startPortTextBox.ForeColor = Color.DarkGray;
                 startPortTextBox.Font = new Font(startPortTextBox.Font, FontStyle.Italic);
                 startPortHasChanged = false;
@@ -280,7 +280,7 @@ namespace PortScanner
         {
             if (string.IsNullOrEmpty(endPortTextBox.Text))
             {
-                endPortTextBox.Text = "Beispiel: 100 ";
+                endPortTextBox.Text = "Beispiel: 100";
                 endPortTextBox.ForeColor = Color.DarkGray;
                 endPortTextBox.Font = new Font(endPortTextBox.Font, FontStyle.Italic);
                 endPortHasChanged = false;
