@@ -117,6 +117,8 @@ namespace PortScanner
                 PingCore.PingPong(this);
                 CleanResultUI();
             }
+            else
+               Scanning = false;
             ErrorOccured = false;
         }
 

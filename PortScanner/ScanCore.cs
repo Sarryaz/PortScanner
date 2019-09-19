@@ -69,14 +69,8 @@ namespace PortScanner
                                 }
                                 else sock.Close();
                             }
-                            catch (SocketException ex)
-                            {
-                                Form.Scanning = false;
-                                MessageBox.Show("Eine Exception ist aufgetreten: {0}",
-                                ex.InnerException != null
-                                    ? ex.InnerException.Message
-                                    : ex.Message);
-                            }
+                            catch (SocketException)
+                            { Form.Scanning = false; }
                         }
                     }
                     stopwatch.Stop();
