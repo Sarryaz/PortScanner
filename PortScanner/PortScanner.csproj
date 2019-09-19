@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PingCore.cs" />
+    <Compile Include="ScanCore.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
