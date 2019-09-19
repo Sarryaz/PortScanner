@@ -23,6 +23,12 @@ namespace PortScanner
             this.ActiveControl = ipAdressLabel;
         }
 
+        public int? ParseIntOrNull(string input)
+        {
+            if (Int32.TryParse(input, out int output)) return output;
+            return null;
+        }
+
         public string IPAdress
         {
             get => ipTextBox.Text;
@@ -40,18 +46,18 @@ namespace PortScanner
         }
         public int StartPort
         {
-            get => Int32.Parse(startPortTextBox.Text);
-            set => Int32.Parse(startPortTextBox.Text);
+            get => ParseIntOrNull(startPortTextBox.Text) ?? 10;
+            set => startPortTextBox.Text = value.ToString();
         }
         public int EndPort
         {
-            get => Int32.Parse(endPortTextBox.Text);
-            set => Int32.Parse(endPortTextBox.Text);
+            get => ParseIntOrNull(endPortTextBox.Text) ?? 100;
+            set => endPortTextBox.Text = value.ToString();
         }
         public int Timeout
         {
-            get => Int32.Parse(msTextBox.Text);
-            set => Int32.Parse(msTextBox.Text);
+            get => ParseIntOrNull(msTextBox.Text) ?? 200;
+            set => msTextBox.Text = value.ToString();
         }
         public bool ErrorOccured
         { get; set; }
@@ -112,8 +118,8 @@ namespace PortScanner
         }
         public void SetProgressbarValues()
         {
-            progressBar.Minimum = Int32.Parse(startPortTextBox.Text);
-            progressBar.Maximum = Int32.Parse(endPortTextBox.Text);
+            progressBar.Minimum = StartPort;
+            progressBar.Maximum = EndPort;
         }
 
         private void IpTextBox_Enter(object sender, EventArgs e)
@@ -127,18 +133,21 @@ namespace PortScanner
         }
         private void IpTextBox_Leave(object sender, EventArgs e)
         {
-            if (!ipTextHasChanged)
+            if (string.IsNullOrEmpty(ipTextBox.Text))
             {
                 ipTextBox.Text = " Beispiel: 128.105.39.11 ";
                 ipTextBox.ForeColor = Color.DarkGray;
                 ipTextBox.Font = new Font(ipTextBox.Font, FontStyle.Italic);
-                ipTextHasChanged = default;
+                ipTextHasChanged = false;
+            }
+            else
+            {
+                ipTextHasChanged = true;
             }
         }
         private void IpTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(ipTextBox.Text))
-                ipTextHasChanged = true;
+            
         }
         private void StartPortTextBox_Enter(object sender, EventArgs e)
         {
@@ -152,12 +161,16 @@ namespace PortScanner
 
         private void StartPortTextBox_Leave(object sender, EventArgs e)
         {
-            if (!startPortHasChanged)
+            if (string.IsNullOrEmpty(startPortTextBox.Text))
             {
-                startPortTextBox.Text = "Beispiel: 21 ";
+                startPortTextBox.Text = "Beispiel: 10 ";
                 startPortTextBox.ForeColor = Color.DarkGray;
                 startPortTextBox.Font = new Font(startPortTextBox.Font, FontStyle.Italic);
-                ipTextHasChanged = default;
+                startPortHasChanged = false;
+            }
+            else
+            {
+                startPortHasChanged = true;
             }
         }
 
@@ -173,12 +186,16 @@ namespace PortScanner
 
         private void EndPortTextBox_Leave(object sender, EventArgs e)
         {
-            if (!endPortHasChanged)
+            if (string.IsNullOrEmpty(endPortTextBox.Text))
             {
-                endPortTextBox.Text = "Beispiel: 5355 ";
+                endPortTextBox.Text = "Beispiel: 100 ";
                 endPortTextBox.ForeColor = Color.DarkGray;
                 endPortTextBox.Font = new Font(endPortTextBox.Font, FontStyle.Italic);
-                endPortHasChanged = default;
+                endPortHasChanged = false;
+            }
+            else
+            {
+                endPortHasChanged = true;
             }
         }
 
@@ -194,31 +211,32 @@ namespace PortScanner
 
         private void MsTextBox_Leave(object sender, EventArgs e)
         {
-            if (!timeoutHasChanged)
+            if (string.IsNullOrEmpty(msTextBox.Text))
             {
                 msTextBox.Text = "Beispiel: 200 ";
                 msTextBox.ForeColor = Color.DarkGray;
                 msTextBox.Font = new Font(msTextBox.Font, FontStyle.Italic);
-                timeoutHasChanged = default;
+                timeoutHasChanged = false;
+            }
+            else
+            {
+                timeoutHasChanged = true;
             }
         }
 
         private void StartPortTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(startPortTextBox.Text))
-                startPortHasChanged = true;
+            
         }
 
         private void EndPortTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(endPortTextBox.Text))
-                endPortHasChanged = true;
+            
         }
 
         private void MsTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(msTextBox.Text))
-                timeoutHasChanged = true;
+            
         }
 
         private void StartPortTextBox_KeyPress(object sender, KeyPressEventArgs e)
@@ -245,6 +263,14 @@ namespace PortScanner
                 e.Handled = true;
             }
 
+        }
+
+        private void ipTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                scanButton.PerformClick();
+            }
         }
     }
 }
