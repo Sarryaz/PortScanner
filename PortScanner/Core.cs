@@ -26,7 +26,17 @@ namespace PortScanner
         /// <param name="Form">Gibt eine Form vom Typ MainForm in die Methode</param>
         internal static void InputHandler(MainForm Form)
         {
-            if (!IPAddress.TryParse(Form.IPAdress, out IPAddress ipAdress))
+            int dnsEntries;
+            try
+            {
+                dnsEntries = Dns.GetHostAddresses(Form.IPAdress).Length;
+            }
+            catch (Exception e)
+            {
+                dnsEntries = 0;
+            }
+            
+            if (dnsEntries <= 0)
             {
                 MessageBox.Show("Bitte gebe eine gültige IP-Adresse an.");
                 Form.ErrorOccured = true;

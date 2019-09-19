@@ -16,6 +16,8 @@ namespace PortScanner
         bool startPortHasChanged;
         bool endPortHasChanged;
         bool timeoutHasChanged;
+        
+        public bool Scanning;
 
         /// <summary>
         /// Haupteinstiegspunkt für die Oberfläche
@@ -104,6 +106,8 @@ namespace PortScanner
         /// <param name="e">Enthält die Daten des aufgetretenen Events</param>
         private void ScanButton_Click(object sender, EventArgs e)
         {
+            if (Scanning) return;
+            Scanning = true;
             StoppedByUser = default;
             Core.InputHandler(this);
             if (!ErrorOccured)

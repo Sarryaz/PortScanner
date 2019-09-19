@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -13,16 +14,26 @@ namespace PortScanner
     class ScanCore
     {
         /// <summary>
-        /// Führt den eigentlichen Scan der offenen Ports anhand der angegebenen IP-Adresse aus
+        /// Führt den eigentlichen Scan der offenen Ports anhand der angegebenen IP-Adresse / des angegebenen Hostnames
+        /// aus
         /// </summary>
         /// <param name="Form">Gibt eine Form vom Typ MainForm in die Methode</param>
         internal static void Scan(MainForm Form)
         {
+            try
+            {
+                if (Dns.GetHostAddresses(Form.IPAdress).Length == 0) return;
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+            
             var source = new CancellationTokenSource();
             CancellationToken token = source.Token;
             Task.Run(() =>
             {
-                if (IPAddress.TryParse(Form.IPAdress, out IPAddress ipAdress))
+                if (Dns.GetHostAddresses(Form.IPAdress).Length != 0)
                 {
                     Stopwatch stopwatch = new Stopwatch();
                     stopwatch.Start();
@@ -34,6 +45,7 @@ namespace PortScanner
                             {
                                 Form.ResetProgressbarValues();
                                 Form.StoppedByUser = false;
+                                Form.Scanning = false;
                                 MessageBox.Show("Vom Nutzer abgebrochen.");
                                 token.ThrowIfCancellationRequested();
                             }
@@ -47,7 +59,7 @@ namespace PortScanner
                             Form.UpdateLogList("Scanne Port: " + currentPort);
                             try
                             {
-                                var endpoint = new IPEndPoint(IPAddress.Parse(Form.IPAdress), currentPort);
+                                var endpoint = new IPEndPoint(Dns.GetHostAddresses(Form.IPAdress)[0], currentPort);
                                 var result = sock.BeginConnect(endpoint, null, null);
                                 Form.UpdateProgressbar(currentPort);
                                 if (result.AsyncWaitHandle.WaitOne(Form.Timeout, true))
@@ -59,6 +71,7 @@ namespace PortScanner
                             }
                             catch (SocketException ex)
                             {
+                                Form.Scanning = false;
                                 MessageBox.Show("Eine Exception ist aufgetreten: {0}",
                                 ex.InnerException != null
                                     ? ex.InnerException.Message
@@ -68,6 +81,7 @@ namespace PortScanner
                     }
                     stopwatch.Stop();
                     Form.Invoke((MethodInvoker)(() => Form.JobDuration = stopwatch.Elapsed.ToString()));
+                    Form.Scanning = false;
                     MessageBox.Show("Scan erfolgreich abgeschlossen!");
                 }
             }, token);
